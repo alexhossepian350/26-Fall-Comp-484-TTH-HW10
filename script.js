@@ -100,8 +100,10 @@ var petComments = {
 
 // Treat: increases happiness and weight
 function clickedTreatButton() {
-  // Read how much happiness a treat gives from the button's data-happiness attribute
-  var happinessGain = document.querySelector(".treat-button").getAttribute("data-happiness");
+  // Read how much happiness a treat gives from the button's data-happiness attribute.
+  // Fix for HW10: getAttribute returns a string ("2"), so convert it with Number()
+  // or += joins the text (10 + "2" = "102") instead of adding (10 + 2 = 12)
+  var happinessGain = Number(document.querySelector(".treat-button").getAttribute("data-happiness"));
 
   pet_info.happiness += happinessGain;
   pet_info.weight += 1;
