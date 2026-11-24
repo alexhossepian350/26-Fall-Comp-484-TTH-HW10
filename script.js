@@ -9,6 +9,10 @@
 
 $(function() { // Runs once all the DOM elements on the page are ready to be used.
 
+  // Custom styled console banner using %c
+  console.log("%cGiga Pet: Mr. Fluffy", "color: #ffffff; background: #6a4c93; font-size: 20px; font-weight: bold; padding: 4px 8px; border-radius: 4px;");
+  console.info("Giga Pet loaded. Click a button to take care of Mr. Fluffy.");
+
   // Show the pet's starting name, weight, happiness, and energy in the HTML
   checkAndUpdatePetInfoInHtml();
 
@@ -87,6 +91,7 @@ function clickedTreatButton() {
 
   showPetComment('treat');
   checkAndUpdatePetInfoInHtml();
+  logAction("Treat");
 }
 
 // Play: increases happiness, decreases weight, and uses some energy
@@ -102,6 +107,7 @@ function clickedPlayButton() {
 
   showPetComment('play');
   checkAndUpdatePetInfoInHtml();
+  logAction("Play");
 }
 
 // Exercise: decreases happiness and weight, and uses a lot of energy
@@ -117,6 +123,7 @@ function clickedExerciseButton() {
 
   showPetComment('exercise');
   checkAndUpdatePetInfoInHtml();
+  logAction("Exercise");
 }
 
 // Nap (new button): Mr. Fluffy falls asleep for a short time and wakes up
@@ -147,6 +154,7 @@ function clickedNapButton() {
 
       showPetComment('napEnd');
       checkAndUpdatePetInfoInHtml();
+      logAction("Nap");
       setButtonsEnabled(true);
     });
   }, NAP_LENGTH_MS);
@@ -156,10 +164,24 @@ function clickedNapButton() {
 // Otherwise the pet complains that it is tired, and the function returns false.
 function hasEnoughEnergy(cost) {
   if (pet_info.energy < cost) {
+    if (pet_info.energy === 0) {
+      console.error("Mr. Fluffy has no energy left (0 / " + MAX_ENERGY + "). He needs a nap!");
+    } else {
+      console.warn("Mr. Fluffy is low on energy: has " + pet_info.energy + ", needs " + cost + ".");
+    }
     showPetComment('tooTired');
     return false;
   }
   return true;
+}
+
+// Logs what a button did as one collapsible group in the Console,
+// with the pet's current stats shown as a table
+function logAction(actionName) {
+  console.group(actionName + " button clicked");
+  console.log("Weight: " + pet_info.weight + ", Happiness: " + pet_info.happiness + ", Energy: " + pet_info.energy);
+  console.table(pet_info);
+  console.groupEnd();
 }
 
 // Turns all of the action buttons on (true) or off (false)
