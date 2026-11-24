@@ -100,7 +100,10 @@ var petComments = {
 
 // Treat: increases happiness and weight
 function clickedTreatButton() {
-  pet_info.happiness += 2;
+  // Read how much happiness a treat gives from the button's data-happiness attribute
+  var happinessGain = document.querySelector(".treat-button").getAttribute("data-happiness");
+
+  pet_info.happiness += happinessGain;
   pet_info.weight += 1;
 
   showPetComment('treat');
