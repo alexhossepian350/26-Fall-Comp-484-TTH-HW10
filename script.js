@@ -13,6 +13,13 @@ $(function() { // Runs once all the DOM elements on the page are ready to be use
   console.log("%cGiga Pet: Mr. Fluffy", "color: #ffffff; background: #6a4c93; font-size: 20px; font-weight: bold; padding: 4px 8px; border-radius: 4px;");
   console.info("Giga Pet loaded. Click a button to take care of Mr. Fluffy.");
 
+  // Intentional 404 for HW10: load a nap picture that does not exist in images/
+  var napPicture = new Image();
+  napPicture.onerror = function() {
+    console.warn("Could not load the nap picture: " + napPicture.src);
+  };
+  napPicture.src = "images/cat-napping.png";
+
   // Show the pet's starting name, weight, happiness, and energy in the HTML
   checkAndUpdatePetInfoInHtml();
 
@@ -21,6 +28,13 @@ $(function() { // Runs once all the DOM elements on the page are ready to be use
   $('.play-button').click(clickedPlayButton);
   $('.exercise-button').click(clickedExerciseButton);
   $('.nap-button').click(clickedNapButton);
+
+  // Clicking the cat gives him a cuddle (slow on purpose, see cuddlePet below)
+  document.querySelector(".pet-image").onclick = cuddlePet;
+
+  // Intentional bug for HW10 (TypeError): there is no ".pet-mood" element on the page,
+  // so querySelector returns null and setting innerHTML on null fails
+  document.querySelector(".pet-mood").innerHTML = "Mr. Fluffy is feeling purr-fect!";
 });
 
 // The pet's current stats. These are numbers (not strings) so we can do math with them.
@@ -182,6 +196,16 @@ function logAction(actionName) {
   console.log("Weight: " + pet_info.weight + ", Happiness: " + pet_info.happiness + ", Energy: " + pet_info.energy);
   console.table(pet_info);
   console.groupEnd();
+}
+
+// Intentional Violation for HW10: this click handler takes about half a second,
+// so Chrome warns that the 'click' handler took too long
+function cuddlePet() {
+  var start = Date.now();
+  while (Date.now() - start < 500) {
+    // do nothing on purpose; this blocks the page
+  }
+  console.log("Mr. Fluffy enjoyed a long cuddle.");
 }
 
 // Turns all of the action buttons on (true) or off (false)
